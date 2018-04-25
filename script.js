@@ -1,24 +1,37 @@
-const container = document.querySelector('#container');
+function createGrid(size=16){
+  document.documentElement.style.setProperty('--size', size);
 
-function createGrid(rows=16, columns=16){
-  for (let i = 0; i < rows ; i++) {
-   for (let j = 0; j < columns; j++) {
-      const gridElement = document.createElement('div');
-      gridElement.classList.add('grid-item');
-      const row = normCoordinate(i);
-      const column = normCoordinate(j);
-      gridElement.id = row + column;
-      container.appendChild(gridElement)
+  for (let i = 0; i < size ; i++) {
+    for (let j = 0; j < size; j++) {
+      const gridItem = document.createElement('div');
+      gridItem.classList.add('gridItem');
+      container.appendChild(gridItem);
     };
   };
+  createHover();
 };
 
-function normCoordinate(num) {
-  let txt = num.toString();
-  if(txt.length == 1) {
-    txt = '0' + txt
-  };
-  return txt;
+function resetGrid() {
+  let gridItems = document.querySelectorAll('.gridItem');
+  gridItems.forEach((gridItem) => container.removeChild(gridItem));
 };
+
+function createNewGrid() {
+  const gridSize = prompt('How many rows and columns should the sketch have?');
+  resetGrid();
+  createGrid(gridSize);
+}
+
+function createHover() {
+  const gridItems = document.querySelectorAll('.gridItem')
+  gridItems.forEach((gridItem) => gridItem.addEventListener('mouseenter', function () {
+    this.classList.add('hovering');
+  }));
+}
+
+const container = document.querySelector('#container');
+
+const resetButton = document.querySelector('#reset');
+resetButton.addEventListener('click', createNewGrid);
 
 createGrid();
